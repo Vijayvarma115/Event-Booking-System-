@@ -300,96 +300,9 @@ git clone <repository-url>
 cd "Event management"
 ```
 
-### Backend Setup
+## Key Features:
 
-1. Navigate to server directory:
-```bash
-cd server
-```
-
-2. Install dependencies:
-```bash
-npm install
-```
-
-3. Create `.env` file:
-```env
-# Server Configuration
-PORT=5000
-NODE_ENV=development
-
-# MongoDB
-MONGODB_URI=mongodb://localhost:27017/event-management
-# OR for MongoDB Atlas:
-# MONGODB_URI=mongodb+srv://<username>:<password>@cluster.mongodb.net/event-management
-
-# JWT Secret
-JWT_SECRET=your_jwt_secret_key_here
-
-# Stripe Configuration
-STRIPE_SECRET_KEY=sk_test_your_stripe_secret_key
-STRIPE_PUBLISHABLE_KEY=pk_test_your_stripe_publishable_key
-
-# Email Configuration (Gmail)
-EMAIL_USER=your-email@gmail.com
-EMAIL_PASS=your-app-specific-password
-
-# Twilio SMS Configuration (Optional)
-TWILIO_ACCOUNT_SID=your_twilio_account_sid
-TWILIO_AUTH_TOKEN=your_twilio_auth_token
-TWILIO_PHONE_NUMBER=+1234567890
-
-# Frontend URL (for CORS)
-CLIENT_URL=http://localhost:3000
-```
-
-4. Start the server:
-```bash
-npm start
-```
-
-Backend will run on `http://localhost:5000`
-
-### Frontend Setup
-
-1. Navigate to client directory:
-```bash
-cd client
-```
-
-2. Install dependencies:
-```bash
-npm install
-```
-
-3. Create `.env` file:
-```env
-REACT_APP_API_URL=http://localhost:5000
-REACT_APP_STRIPE_PUBLISHABLE_KEY=pk_test_your_stripe_publishable_key
-```
-
-4. Start the development server:
-```bash
-npm start
-```
-
-Frontend will run on `http://localhost:3000`
-
-
-```
-
-## Key Features Explained
-
-### 1. Authentication Flow
-
-- User registers with email and password
-- Password is hashed using bcrypt before storage
-- Upon login, server generates JWT token
-- Token is stored in localStorage on client
-- Protected routes verify JWT token via middleware
-- Admin users have additional privileges
-
-### 2. Race Condition Protection
+### 1. Race Condition Protection
 
 **Current Implementation:**
 - **Atomic Operations**: Uses MongoDB's `findOneAndUpdate` with `$inc` operator for seat reservations
@@ -411,6 +324,15 @@ If two users try to book the last seat simultaneously:
 2. Second request fails because `availableSeats < numberOfTickets` condition no longer met
 3. User receives "Seats no longer available" message
 
+### 2.Authentication Flow
+
+- User registers with email and password
+- Password is hashed using bcrypt before storage
+- Upon login, server generates JWT token
+- Token is stored in localStorage on client
+- Protected routes verify JWT token via middleware
+- Admin users have additional privileges
+  
 ### 3. Event Booking Process
 
 1. User browses events on homepage
@@ -444,7 +366,9 @@ If two users try to book the last seat simultaneously:
 
 | Card Number | Description |
 |-------------|-------------|
-| 4242 4242 4242 4242 | Success ||
+| 4242 4242 4242 4242 | Success |
+
+We can use any of this Demo numbers listed : " https://docs.stripe.com/testing "
 
 Use any future expiry date and any 3-digit CVC.
 
