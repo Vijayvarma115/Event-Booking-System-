@@ -756,30 +756,3 @@ Use any future expiry date and any 3-digit CVC.
 2. **SMS Notifications**: Optional feature. Requires Twilio configuration.
 
 3. **Race Condition Protection**: Currently uses MongoDB atomic operations for basic concurrency control. For high-traffic scenarios with individual seat selection, the FIFO Queue + 2PL enhancement (see Future Enhancements) would provide more granular control.
-
-
-## Contributing
-
-1. Fork the repository
-2. Create feature branch (`git checkout -b feature/AmazingFeature`)
-3. Commit changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to branch (`git push origin feature/AmazingFeature`)
-5. Open Pull Request
-
-## License
-
-This project is licensed under the MIT License.
-
-## Support
-
-For issues and questions:
-- Create an issue in the repository
-- Contact: your-email@example.com
-
-## Acknowledgments
-
-- MongoDB for database
-- Stripe for payment processing
-- React team for the amazing framework
-- Socket.io for real-time communication
-- All open-source contributors
