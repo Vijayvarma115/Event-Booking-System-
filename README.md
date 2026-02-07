@@ -355,21 +355,6 @@ Event management/
 └── updateEventPrices.js      # Utility script
 ```
 
-## Installation
-
-### Prerequisites
-- Node.js (v14 or higher)
-- MongoDB (local or MongoDB Atlas)
-- Stripe account
-- Twilio account (optional, for SMS)
-- Gmail account (for email notifications)
-
-### Clone Repository
-```bash
-git clone <repository-url>
-cd "Event management"
-```
-
 ## Future Enhancement(what i though):
 
 -  **FIFO Queue + Two-Phase Locking (2PL)** for individual seat selection
