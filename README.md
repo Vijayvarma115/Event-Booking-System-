@@ -394,115 +394,7 @@ npm start
 
 Frontend will run on `http://localhost:3000`
 
-## Environment Variables
 
-### Backend (.env)
-
-| Variable | Description | Required |
-|----------|-------------|----------|
-| `PORT` | Server port number | Yes |
-| `MONGODB_URI` | MongoDB connection string | Yes |
-| `JWT_SECRET` | Secret key for JWT tokens | Yes |
-| `STRIPE_SECRET_KEY` | Stripe secret API key | Yes |
-| `STRIPE_PUBLISHABLE_KEY` | Stripe publishable key | Yes |
-| `EMAIL_USER` | Gmail address for sending emails | Yes |
-| `EMAIL_PASS` | Gmail app-specific password | Yes |
-| `TWILIO_ACCOUNT_SID` | Twilio account SID | No |
-| `TWILIO_AUTH_TOKEN` | Twilio auth token | No |
-| `TWILIO_PHONE_NUMBER` | Twilio phone number | No |
-| `CLIENT_URL` | Frontend URL for CORS | Yes |
-
-### Frontend (.env)
-
-| Variable | Description | Required |
-|----------|-------------|----------|
-| `REACT_APP_API_URL` | Backend API URL | Yes |
-| `REACT_APP_STRIPE_PUBLISHABLE_KEY` | Stripe publishable key | Yes |
-
-## API Endpoints
-
-### Authentication
-
-| Method | Endpoint | Description | Auth Required |
-|--------|----------|-------------|---------------|
-| POST | `/api/auth/register` | Register new user | No |
-| POST | `/api/auth/login` | User login | No |
-| GET | `/api/auth/me` | Get current user | Yes |
-
-### Events
-
-| Method | Endpoint | Description | Auth Required |
-|--------|----------|-------------|---------------|
-| GET | `/api/events` | Get all events | No |
-| GET | `/api/events/:id` | Get event by ID | No |
-| POST | `/api/events` | Create new event | Yes (Admin) |
-| PUT | `/api/events/:id` | Update event | Yes (Admin) |
-| DELETE | `/api/events/:id` | Delete event | Yes (Admin) |
-
-### Bookings
-
-| Method | Endpoint | Description | Auth Required |
-|--------|----------|-------------|---------------|
-| GET | `/api/bookings` | Get user's bookings | Yes |
-| GET | `/api/bookings/:id` | Get booking by ID | Yes |
-| POST | `/api/bookings` | Create new booking | Yes |
-| POST | `/api/bookings/:id/payment` | Process payment | Yes |
-| GET | `/api/bookings/admin/all` | Get all bookings | Yes (Admin) |
-
-## Database Schema
-
-### User Model
-```javascript
-{
-  name: String (required),
-  email: String (required, unique),
-  password: String (required, hashed),
-  phone: String,
-  role: String (enum: ['user', 'admin'], default: 'user'),
-  createdAt: Date
-}
-```
-
-### Event Model
-```javascript
-{
-  title: String (required),
-  description: String (required),
-  category: String (enum: ['concert', 'conference', 'workshop', 'sports', 'festival', 'other']),
-  venue: String (required),
-  address: String (required),
-  city: String (required),
-  date: Date (required),
-  time: String (required),
-  duration: Number (minutes, default: 120),
-  price: Number (min: 0, default: 0),
-  totalSeats: Number (min: 0, default: 0),
-  availableSeats: Number (min: 0, default: 0),
-  image: String (URL),
-  featured: Boolean (default: false),
-  organizer: ObjectId (ref: 'User'),
-  seatMapEnabled: Boolean (default: false),
-  sections: Array (seat map configuration),
-  createdAt: Date
-}
-```
-
-### Booking Model
-```javascript
-{
-  user: ObjectId (ref: 'User', required),
-  event: ObjectId (ref: 'Event', required),
-  numberOfTickets: Number (required, min: 1),
-  totalAmount: Number (required, min: 0),
-  paymentStatus: String (enum: ['pending', 'completed', 'failed', 'refunded'], default: 'pending'),
-  paymentIntentId: String,
-  bookingReference: String (unique),
-  qrCode: String,
-  selectedSeats: Array (seat details),
-  seatPriceBreakdown: Array,
-  status: String (enum: ['confirmed', 'cancelled'], default: 'confirmed'),
-  createdAt: Date
-}
 ```
 
 ## Key Features Explained
@@ -559,166 +451,21 @@ If two users try to book the last seat simultaneously:
 
 ### 4. Payment Integration (Stripe)
 
-- Payment Intent created on backend
-- Client Secret sent to frontend
-- Stripe Elements used for secure card input
-- Payment confirmed on frontend
-- Backend webhook handles payment confirmation
-- Booking updated with payment status
-
 ### 5. Real-time Notifications (Socket.io)
-
-- User connects to socket upon login
-- User identified by userId
-- Events:
-  - `booking-confirmed`: Sent when payment successful
-- Toast notifications displayed in real-time
 
 ### 6. QR Code Generation
 
-- Unique QR code generated for each booking
-- Contains booking reference and event details
-- Embedded in confirmation email
-- Can be scanned at event venue for verification
-
 ### 7. Email Notifications
 
-- Uses Nodemailer with Gmail SMTP
-- Booking confirmation includes:
-  - Event details
-  - Booking reference
-  - Number of tickets
-  - Total amount paid
-  - QR code attachment
-  - Event date and venue
-
 ### 8. Admin Dashboard
-
-- View statistics:
-  - Total events
-  - Total bookings
-  - Total revenue
-  - Recent bookings
-- Manage events (Create, Edit, Delete)
-- View all bookings with search/filter
-- Update event availability
-
-## Running in Production
-
-### Backend
-
-1. Set `NODE_ENV=production` in `.env`
-2. Use production MongoDB URI
-3. Use production Stripe keys
-4. Deploy to platforms like:
-   - Heroku
-   - AWS EC2
-   - DigitalOcean
-   - Railway
-   - Render
-
-### Frontend
-
-1. Build production bundle:
-```bash
-cd client
-npm run build
-```
-
-2. Serve static files from backend or deploy separately to:
-   - Vercel
-   - Netlify
-   - AWS S3 + CloudFront
-   - Firebase Hosting
-
-
-## Development Scripts
-
-### Backend
-```bash
-npm start          # Start server with nodemon
-npm run dev        # Development mode (if configured)
-```
-
-### Frontend
-```bash
-npm start          # Start development server
-npm run build      # Create production build
-npm test           # Run tests (if configured)
-```
-
-## Troubleshooting
-
-### MongoDB Connection Issues
-- Verify MongoDB is running (local) or connection string is correct (Atlas)
-- Check network access settings in MongoDB Atlas
-- Ensure IP address is whitelisted
-
-### Stripe Payment Errors
-- Verify API keys are correct (test/production)
-- Check Stripe dashboard for error logs
-- Ensure client and server keys match environment
-
-### Email Not Sending
-- Enable "Less secure app access" in Gmail (not recommended)
-- Use App-Specific Password (recommended)
-- Check email credentials in `.env`
-- Verify Gmail SMTP settings
-
-### Socket.io Connection Errors
-- Check CORS configuration
-- Verify client URL matches backend setup
-- Ensure socket connection happens after login
-
-### Build Errors
-- Delete `node_modules` and `package-lock.json`
-- Run `npm install` again
-- Clear npm cache: `npm cache clean --force`
-
-## Testing
-
-### Manual Testing Checklist
-
-**User Flow:**
-- [ ] User registration
-- [ ] User login
-- [ ] Browse events
-- [ ] View event details
-- [ ] Book tickets
-- [ ] Complete payment (use Stripe test card: 4242 4242 4242 4242)
-- [ ] Receive confirmation email
-- [ ] View booking in dashboard
-
-**Admin Flow:**
-- [ ] Admin login
-- [ ] Create new event
-- [ ] Edit event
-- [ ] Delete event
-- [ ] View all bookings
-- [ ] View dashboard statistics
 
 ### Stripe Test Cards Demo Numbers
 
 | Card Number | Description |
 |-------------|-------------|
-| 4242 4242 4242 4242 | Success |
-| 4000 0000 0000 9995 | Declined |
-| 4000 0000 0000 3220 | 3D Secure required |
+| 4242 4242 4242 4242 | Success ||
 
 Use any future expiry date and any 3-digit CVC.
-
-## Security Best Practices
-
-1. **Never commit `.env` files** to version control
-2. Use strong JWT secrets (64+ characters)
-3. Set JWT token expiration (e.g., 7 days)
-4. Hash passwords with sufficient salt rounds (10+)
-5. Validate and sanitize all user inputs
-6. Use HTTPS in production
-7. Implement rate limiting for API endpoints
-8. Keep dependencies updated
-9. Use environment-specific configurations
-10. Implement proper error handling (don't expose stack traces)
 
 ## Future Enhancements
 
@@ -732,27 +479,10 @@ Use any future expiry date and any 3-digit CVC.
   - Real-time seat status updates via Socket.io
   - 10-minute reservation timer with automatic expiry
   - Queue position tracking for waiting users
-- [ ] Password reset functionality
-- [ ] User profile management
 
-### Medium Priority
-- [ ] Event reviews and ratings
-- [ ] Advanced search and filtering
-- [ ] Multi-language support
-- [ ] Event categories with images
-- [ ] Social media sharing
-- [ ] Analytics dashboard for event organizers
-
-### Low Priority
-- [ ] Refund management
-- [ ] Attendance tracking via QR code scanning
-- [ ] Calendar integration (Google Calendar, iCal)
-- [ ] Push notifications (web/mobile)
 
 ## Known Issues
 
 1. **Seat Map Feature**: Currently disabled. The interactive seat map with section-based pricing has been removed from the UI but remains in the database schema for future implementation. Database models include `SeatLockQueue` for the planned FIFO + 2PL system.
-
-2. **SMS Notifications**: Optional feature. Requires Twilio configuration.
 
 3. **Race Condition Protection**: Currently uses MongoDB atomic operations for basic concurrency control. For high-traffic scenarios with individual seat selection, the FIFO Queue + 2PL enhancement (see Future Enhancements) would provide more granular control.
