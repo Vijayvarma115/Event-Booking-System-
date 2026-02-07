@@ -1,0 +1,188 @@
+.checkout-page {
+  min-height: calc(100vh - 60px);
+  padding: 40px 0;
+  background: #f5f5f5;
+}
+
+.checkout-title {
+  text-align: center;
+  font-size: 32px;
+  color: #2c3e50;
+  margin-bottom: 40px;
+}
+
+.checkout-container {
+  display: grid;
+  grid-template-columns: 1fr 400px;
+  gap: 30px;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.checkout-card {
+  background: white;
+  padding: 30px;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.checkout-card h2 {
+  font-size: 24px;
+  margin-bottom: 25px;
+  color: #2c3e50;
+}
+
+.checkout-form {
+  width: 100%;
+}
+
+.card-element-container {
+  padding: 15px;
+  border: 2px solid #e0e0e0;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  background: #fafafa;
+}
+
+.test-card-info {
+  margin-top: 20px;
+  padding: 15px;
+  background: #e3f2fd;
+  border-radius: 8px;
+  border-left: 4px solid #2196f3;
+}
+
+.test-card-info p {
+  margin: 5px 0;
+  font-size: 13px;
+  color: #1565c0;
+}
+
+.order-summary {
+  background: white;
+  padding: 25px;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  position: sticky;
+  top: 80px;
+}
+
+.order-summary h3 {
+  font-size: 20px;
+  margin-bottom: 20px;
+  color: #2c3e50;
+  padding-bottom: 15px;
+  border-bottom: 2px solid #f0f0f0;
+}
+
+.summary-event {
+  display: flex;
+  gap: 15px;
+  margin-bottom: 20px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.summary-event img {
+  width: 80px;
+  height: 80px;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+.summary-event h4 {
+  font-size: 16px;
+  margin-bottom: 8px;
+  color: #2c3e50;
+}
+
+.event-date,
+.event-time {
+  font-size: 13px;
+  color: #666;
+  margin: 3px 0;
+}
+
+.summary-details {
+  margin-bottom: 20px;
+}
+
+.summary-row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 12px;
+  font-size: 15px;
+  color: #666;
+}
+
+.summary-total {
+  padding-top: 15px;
+  border-top: 2px solid #f0f0f0;
+  margin-top: 15px;
+  font-size: 18px;
+  font-weight: bold;
+  color: #2c3e50;
+}
+
+.booking-reference {
+  background: #f8f9fa;
+  padding: 15px;
+  border-radius: 8px;
+  text-align: center;
+}
+
+.booking-reference p {
+  font-size: 12px;
+  color: #999;
+  margin-bottom: 8px;
+  text-transform: uppercase;
+}
+
+.booking-reference code {
+  display: block;
+  font-size: 16px;
+  font-weight: bold;
+  color: #667eea;
+  font-family: 'Courier New', monospace;
+}
+
+@media (max-width: 968px) {
+  .checkout-container {
+    grid-template-columns: 1fr;
+  }
+
+  .order-summary {
+    position: static;
+  }
+}
+
+/* Seat details styles */
+.seats-detail {
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid #e0e0e0;
+}
+
+.seats-detail h4 {
+  font-size: 0.9rem;
+  color: #666;
+  margin-bottom: 0.75rem;
+  font-weight: 600;
+}
+
+.seats-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.seat-badge {
+  display: inline-block;
+  padding: 0.4rem 0.8rem;
+  background: #e3f2fd;
+  color: #1976d2;
+  border-radius: 4px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  border: 1px solid #bbdefb;
+}
