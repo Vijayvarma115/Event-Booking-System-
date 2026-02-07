@@ -108,14 +108,6 @@ The frontend will be available at `http://localhost:3000` and the backend at `ht
 
 ## Database Setup
 
-### Using MongoDB Locally
-
-```bash
-# Install MongoDB Community Edition (if not already installed)
-# Then start the MongoDB service
-mongod
-```
-
 ### Using MongoDB Atlas (Cloud)
 
 1. Create an account at [MongoDB Atlas](https://www.mongodb.com/cloud/atlas)
@@ -154,29 +146,18 @@ REACT_APP_STRIPE_PUBLIC_KEY=pk_test_your_stripe_key
 **Terminal 1 - Backend:**
 ```bash
 cd server
+npm install
 npm run dev
 ```
 
 **Terminal 2 - Frontend:**
 ```bash
 cd client
+npm install
 npm start
 ```
 
-### Production Build
 
-**Backend:**
-```bash
-cd server
-npm start
-```
-
-**Frontend:**
-```bash
-cd client
-npm run build
-npm start
-```
 
 ## Features
 
