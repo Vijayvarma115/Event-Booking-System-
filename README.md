@@ -157,9 +157,79 @@ npm install
 npm start
 ```
 
+## Key Features:
 
+### 1. Race Condition Protection
 
-## Features
+**Current Implementation:**
+- **Atomic Operations**: Uses MongoDB's `findOneAndUpdate` with `$inc` operator for seat reservations
+- **Optimistic Locking**: Validates seat availability as part of the update query
+- **Concurrent Booking Prevention**: Multiple simultaneous booking requests for the same seats are handled atomically
+- **Transaction Guarantee**: Seat decrement and availability check happen in a single atomic operation
+
+**How It Works:**
+```javascript
+// Atomic update ensures no race conditions
+Event.findOneAndUpdate(
+  { _id: eventId, availableSeats: { $gte: numberOfTickets } },
+  { $inc: { availableSeats: -numberOfTickets } }
+)
+```
+
+If two users try to book the last seat simultaneously:
+1. First request succeeds and decrements seats
+2. Second request fails because `availableSeats < numberOfTickets` condition no longer met
+3. User receives "Seats no longer available" message
+
+### 2.Authentication Flow
+
+- User registers with email and password
+- Password is hashed using bcrypt before storage
+- Upon login, server generates JWT token
+- Token is stored in localStorage on client
+- Protected routes verify JWT token via middleware
+- Admin users have additional privileges
+  
+### 3. Event Booking Process
+
+1. User browses events on homepage
+2. Clicks on event to view details
+3. Selects number of tickets
+4. Clicks "Book Now" (requires login)
+5. **Atomic seat reservation** prevents race conditions
+6. Creates booking record with "pending" payment status
+7. Redirected to checkout page
+8. Enters payment details (Stripe)
+9. Payment processed
+10. On success:
+   - Payment status updated to "completed"
+   - QR code generated
+   - Confirmation email sent
+   - SMS notification sent (if configured)
+   - Real-time notification via Socket.io
+11. User can view booking in "My Bookings"
+
+### 4. Payment Integration (Stripe)
+
+### 5. Real-time Notifications (Socket.io)
+
+### 6. QR Code Generation
+
+### 7. Email Notifications
+
+### 8. Admin Dashboard
+
+### Stripe Test Cards Demo Numbers
+
+| Card Number | Description |
+|-------------|-------------|
+| 4242 4242 4242 4242 | Success |
+
+We can use any of this Demo numbers listed : " https://docs.stripe.com/testing "
+
+Use any future expiry date and any 3-digit CVC.
+
+## All Features accordingly
 
 ### User Features
 - **Browse Events**: View all available events with filtering by category, location, and date
@@ -300,82 +370,9 @@ git clone <repository-url>
 cd "Event management"
 ```
 
-## Key Features:
+## Future Enhancement(what i though):
 
-### 1. Race Condition Protection
-
-**Current Implementation:**
-- **Atomic Operations**: Uses MongoDB's `findOneAndUpdate` with `$inc` operator for seat reservations
-- **Optimistic Locking**: Validates seat availability as part of the update query
-- **Concurrent Booking Prevention**: Multiple simultaneous booking requests for the same seats are handled atomically
-- **Transaction Guarantee**: Seat decrement and availability check happen in a single atomic operation
-
-**How It Works:**
-```javascript
-// Atomic update ensures no race conditions
-Event.findOneAndUpdate(
-  { _id: eventId, availableSeats: { $gte: numberOfTickets } },
-  { $inc: { availableSeats: -numberOfTickets } }
-)
-```
-
-If two users try to book the last seat simultaneously:
-1. First request succeeds and decrements seats
-2. Second request fails because `availableSeats < numberOfTickets` condition no longer met
-3. User receives "Seats no longer available" message
-
-### 2.Authentication Flow
-
-- User registers with email and password
-- Password is hashed using bcrypt before storage
-- Upon login, server generates JWT token
-- Token is stored in localStorage on client
-- Protected routes verify JWT token via middleware
-- Admin users have additional privileges
-  
-### 3. Event Booking Process
-
-1. User browses events on homepage
-2. Clicks on event to view details
-3. Selects number of tickets
-4. Clicks "Book Now" (requires login)
-5. **Atomic seat reservation** prevents race conditions
-6. Creates booking record with "pending" payment status
-7. Redirected to checkout page
-8. Enters payment details (Stripe)
-9. Payment processed
-10. On success:
-   - Payment status updated to "completed"
-   - QR code generated
-   - Confirmation email sent
-   - SMS notification sent (if configured)
-   - Real-time notification via Socket.io
-11. User can view booking in "My Bookings"
-
-### 4. Payment Integration (Stripe)
-
-### 5. Real-time Notifications (Socket.io)
-
-### 6. QR Code Generation
-
-### 7. Email Notifications
-
-### 8. Admin Dashboard
-
-### Stripe Test Cards Demo Numbers
-
-| Card Number | Description |
-|-------------|-------------|
-| 4242 4242 4242 4242 | Success |
-
-We can use any of this Demo numbers listed : " https://docs.stripe.com/testing "
-
-Use any future expiry date and any 3-digit CVC.
-
-## Future Enhancements
-
-### High Priority
-- [ ] **FIFO Queue + Two-Phase Locking (2PL)** for individual seat selection
+-  **FIFO Queue + Two-Phase Locking (2PL)** for individual seat selection
   - Interactive visual seat map with section-based pricing (VIP, Platinum, General, etc.)
   - FIFO queue system to ensure fair ordering during high-traffic booking
   - Two-phase locking protocol to prevent deadlocks:
